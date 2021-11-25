@@ -8,6 +8,7 @@ import { BlankLayout, HeaderFooterLayout, OnlyFooterLayout, OnlyHeaderLayout } f
 import { Header, Footer } from '../components/common';
 import { Seller } from '../containers/Seller/Seller';
 
+
 export const Routers = () => {
   const buildysURL = process.env.REACT_APP_LINK_BUILDYS;
 
