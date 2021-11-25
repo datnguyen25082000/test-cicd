@@ -32,4 +32,6 @@ jobs:
       # run tests!
       - run: npm build
 
-      - run: npm netlify:deploy
+      - run: npm install -g netlify-cli
+
+      - run: netlify deploy --dir=build --prod
