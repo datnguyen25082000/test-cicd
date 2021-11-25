@@ -64,8 +64,6 @@ workflows:
               ignore:
                 - gh-pages
       - build:
-          requires:
-            - test
       - deploy:
           requires:
             - build
