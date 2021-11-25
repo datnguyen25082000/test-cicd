@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:11.10.1
+      - image: circleci/node:14
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -32,4 +32,18 @@ jobs:
       # run tests!
       - run: npm run build
 
-      - run: netlify deploy --dir=build --prod
+  deploy:
+    executor: node
+    steps:
+      - checkout
+      # Attach the pesisted built files.
+      - attach_workspace:
+          at: ./
+      - <<: *restore_cache
+      - <<: *install_node_modules
+      - run:
+          name: Install netlify-cli
+          command: npm install -g --silent netlify-cli
+      - run:
+          name: Deploy to Netlify
+          command: netlify deploy --dir=./build -p
