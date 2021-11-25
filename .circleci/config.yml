@@ -37,10 +37,6 @@ jobs:
     steps:
       - checkout
       # Attach the pesisted built files.
-      - attach_workspace:
-          at: ./
-      - <<: *restore_cache
-      - <<: *install_node_modules
       - run:
           name: Install netlify-cli
           command: npm install -g --silent netlify-cli
