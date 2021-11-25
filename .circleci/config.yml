@@ -1,47 +1,37 @@
-version: 2.1
-orbs:
-  node: circleci/node@3.0.0
-  docker: circleci/docker@1.4.0
-
+version: 2
 jobs:
-  build-and-push:
-    environment:
-      DOCKER_IMAGE: myinitproject:last
-      DOCKER_TAG: latest
-    executor: docker/docker
-    steps:
-      - setup_remote_docker
-      - checkout
-      - docker/check:
-          docker-username: DOCKER_LOGIN
-          docker-password: DOCKER_PASSWORD
-      - docker/build:
-          image: $DOCKER_IMAGE
-          tag: $DOCKER_TAG
-      - docker/push:
-          digest-path: /tmp/digest.txt
-          image: $DOCKER_IMAGE
-          tag: $DOCKER_TAG
-      - run:
-          command: |
-            echo "Digest is: $(</tmp/digest.txt)"
-  # deploy:
-  #   executor: docker/docker
-  #   steps:
-  #     # Please add $SSH_KEY_FINGERPRINT, $DEPLOYED_USER@ and DEPLOYED_SERVER to project's environment
-  #     - add_ssh_keys:
-  #         fingerprints:
-  #           - $SSH_KEY_FINGERPRINT
-  #     - run: ssh -oStrictHostKeyChecking=no $DEPLOYED_USER@$DEPLOYED_SERVER './deploy.sh'
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:11.10.1
 
-workflows:
-  my-pipeline:
-    jobs:
-      - node/test
-      - build-and-push:
-          requires:
-            - node/test
-          filters:
-            branches:
-              only:
-                - master
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run tests!
+      - run: yarn test
+
+      - run: yarn build
+
+      - run: yarn netlify:deploy
