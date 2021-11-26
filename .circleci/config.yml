@@ -93,5 +93,5 @@ workflows:
               only: master
 
       - notifications:
-        requires:
-          - deploy
+          requires:
+            - deploy
