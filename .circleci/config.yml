@@ -61,9 +61,22 @@ jobs:
       - run:
           name: Install netlify-cli
           command: sudo npm install --unsafe-perm=true -g --silent netlify-cli
-      - run: 
+      - run:
           name: Deploy to Netlify
           command: netlify deploy --dir=./build -p
+
+  request-approval:
+    docker:
+      - image: circleci/node:4.8.2
+    steps:
+      - xmatters/notify:
+          recipients: Engineering Managers
+
+  deploy-stuff:
+    docker:
+      - image: circleci/node:4.8.2
+    steps:
+      - run: echo "Deploy stuff here"
 
 workflows:
   version: 2
@@ -83,3 +96,12 @@ workflows:
           filters:
             branches:
               only: master
+      - request-approval
+      - hold:
+          type: approval
+          requires:
+            - build
+            - request-approval
+      - deploy-stuff:
+          requires:
+            - hold
