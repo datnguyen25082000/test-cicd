@@ -17,4 +17,5 @@ netlify:
   image: node:16
   script:
     - npm install -g netlify-cli
+    - netlify login
     - netlify deploy --dir=build --prod
