@@ -62,7 +62,7 @@ export const Home = () => {
 
   return (
     <div className="home">
-      <p>dat qua dep trai haha ok la haha</p>
+      <p>dat qua dep trai haha ok la haha hihi</p>
       <MenuSlideshow />
       <HomeBanner />
       <Menu />
