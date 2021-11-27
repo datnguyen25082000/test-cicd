@@ -23,7 +23,8 @@ aliases:
         - ./node_modules
 
 version: 2.1
-
+orbs:
+  slack: circleci/slack@4.0
 jobs:
   test:
     executor: node
@@ -65,6 +66,28 @@ jobs:
           name: Deploy to Netlify
           command: netlify deploy --dir=./build -p
 
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
+
 workflows:
   version: 2
   build_and_deploy:
@@ -83,3 +106,5 @@ workflows:
           filters:
             branches:
               only: master
+      - notify:
+          context: slack-secrets
