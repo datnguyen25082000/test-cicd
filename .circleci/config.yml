@@ -24,9 +24,6 @@ aliases:
 
 version: 2.1
 
-orbs:
-  xmatters: xmatters/xmatters-orb@1.0.4
-
 jobs:
   test:
     executor: node
@@ -68,19 +65,6 @@ jobs:
           name: Deploy to Netlify
           command: netlify deploy --dir=./build -p
 
-  request-approval:
-    docker:
-      - image: circleci/node:4.8.2
-    steps:
-      - xmatters/notify:
-          recipients: Engineering Managers
-
-  deploy-stuff:
-    docker:
-      - image: circleci/node:4.8.2
-    steps:
-      - run: echo "Deploy stuff here"
-
 workflows:
   version: 2
   build_and_deploy:
@@ -99,12 +83,3 @@ workflows:
           filters:
             branches:
               only: master
-      - request-approval
-      - hold:
-          type: approval
-          requires:
-            - build
-            - request-approval
-      - deploy-stuff:
-          requires:
-            - hold
