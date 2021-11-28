@@ -62,7 +62,7 @@ export const Home = () => {
 
   return (
     <div className="home">
-      <p>dat qua dep trai CICLE sub 1</p>
+      <p>dat qua dep trai CICLE sub 2</p>
       <MenuSlideshow />
       <HomeBanner />
       <Menu />

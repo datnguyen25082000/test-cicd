@@ -59,7 +59,7 @@ jobs:
           command: netlify unlink
       - run: 
           name: Define app
-          command: netlify link --id $NETLIFY_SITE_ID
+          command: netlify link --id $NETLIFY_SITE_ID_DELIVERY
       - run:
           name: Deploy to Netlify
           command: netlify deploy --dir=./build -p
@@ -79,7 +79,7 @@ jobs:
           command: netlify unlink
       - run: 
           name: Define app
-          command: netlify link --id c72d21c6-095b-47df-93ce-d4b05f5ab516
+          command: netlify link --id $NETLIFY_SITE_ID_DEPLOY
       - run:
           name: Deploy to Netlify
           command: netlify deploy --dir=./build -p
@@ -96,20 +96,19 @@ workflows:
       - build:
           requires:
             - test
-      # - request-testing:
-      #     type: approval
-      #     requires:
-      #       - build
       - delivery:
           requires:
             - build
           filters:
             branches:
               only: master
-
-      - deploy:
+      - request-testing:
+          type: approval
           requires:
             - build
+      - deploy:
+          requires:
+            - request-testing
           filters:
             branches:
               only: master
