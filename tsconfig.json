@@ -15,7 +15,6 @@
       "jsx": "react",
       "sourceMap": true,
       "target": "es5",
-      "downlevelIteration": true,
     },
     "include": ["src"]
   }
