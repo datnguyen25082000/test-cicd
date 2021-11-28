@@ -44,6 +44,26 @@ jobs:
 
   request-testing:
 
+  delivery:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - <<: *install_node_modules
+      - run:
+          name: Install netlify-cli
+          command: sudo npm install --unsafe-perm=true -g --silent netlify-cli
+      - run: 
+          name: Unlink App
+          command: netlify unlink
+      - run: 
+          name: Define app
+          command: netlify link --id $NETLIFY_SITE_ID
+      - run:
+          name: Deploy to Netlify
+          command: netlify deploy --dir=./build -p
+
   deploy:
     executor: node
     steps:
@@ -54,6 +74,9 @@ jobs:
       - run:
           name: Install netlify-cli
           command: sudo npm install --unsafe-perm=true -g --silent netlify-cli
+      - run: 
+          name: Unlink App
+          command: netlify unlink
       - run: 
           name: Define app
           command: netlify link --id c72d21c6-095b-47df-93ce-d4b05f5ab516
@@ -77,6 +100,13 @@ workflows:
       #     type: approval
       #     requires:
       #       - build
+      - delivery:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
       - deploy:
           requires:
             - build
