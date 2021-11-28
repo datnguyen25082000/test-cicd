@@ -42,7 +42,7 @@ jobs:
           paths:
             - build
 
-  request-testing:
+  request-approve:
 
   delivery:
     executor: node
@@ -102,13 +102,13 @@ workflows:
           filters:
             branches:
               only: master
-      - request-testing:
+      - request-approve:
           type: approval
           requires:
             - build
       - deploy:
           requires:
-            - request-testing
+            - request-approve
           filters:
             branches:
               only: master
