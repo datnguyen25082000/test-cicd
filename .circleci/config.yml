@@ -76,7 +76,7 @@ workflows:
             - build
       - deploy:
           requires:
-            - build
+            - request-testing
           filters:
             branches:
               only: master
