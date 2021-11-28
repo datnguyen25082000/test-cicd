@@ -56,7 +56,7 @@ jobs:
           command: sudo npm install --unsafe-perm=true -g --silent netlify-cli
       - run:
           name: Deploy to Netlify
-          command: netlify deploy --dir=./build -p
+          command: netlify deploy --dir=./build -p ID=c72d21c6-095b-47df-93ce-d4b05f5ab516
 
 workflows:
   version: 2
@@ -70,13 +70,13 @@ workflows:
       - build:
           requires:
             - test
-      - request-testing:
-          type: approval
-          requires:
-            - build
+      # - request-testing:
+      #     type: approval
+      #     requires:
+      #       - build
       - deploy:
           requires:
-            - request-testing
+            - build
           filters:
             branches:
               only: master
