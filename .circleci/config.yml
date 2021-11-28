@@ -96,7 +96,7 @@ workflows:
       - build:
           requires:
             - test
-      - delivery:
+       - deploy:
           requires:
             - build
           filters:
@@ -106,9 +106,10 @@ workflows:
           type: approval
           requires:
             - build
-      - deploy:
+      - delivery:
           requires:
             - request-approve
           filters:
             branches:
               only: master
+     
