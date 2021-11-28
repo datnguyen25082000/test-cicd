@@ -54,9 +54,12 @@ jobs:
       - run:
           name: Install netlify-cli
           command: sudo npm install --unsafe-perm=true -g --silent netlify-cli
+      - run: 
+          name: Define app
+          command: netlify link --id c72d21c6-095b-47df-93ce-d4b05f5ab516
       - run:
           name: Deploy to Netlify
-          command: netlify deploy --dir=./build -p ID=c72d21c6-095b-47df-93ce-d4b05f5ab516
+          command: netlify deploy --dir=./build -p
 
 workflows:
   version: 2
